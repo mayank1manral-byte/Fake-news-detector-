@@ -1,0 +1,26 @@
+TRUTHLENS - START HERE
+======================
+
+1. Install Python 3.10+ and open this folder in VS Code.
+2. Open a terminal in this folder.
+3. Create a virtual environment:
+   python -m venv .venv
+4. Activate it on Windows PowerShell:
+   .\.venv\Scripts\Activate.ps1
+5. Install dependencies:
+   python -m pip install -r requirements.txt
+6. Download the Kaggle Fake and Real News dataset:
+   https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset
+7. Put Fake.csv and True.csv inside data/.
+8. Train the model:
+   python train_model.py
+9. Run the app:
+   streamlit run app.py
+10. Run tests:
+    python -m pytest -v
+
+The ZIP includes source code and documentation, but not the dataset or
+trained model artifacts. These are generated locally after dataset setup.
+
+The prediction is a text-classification estimate, not proof that news is
+true or false.

@@ -1,0 +1,23 @@
+# Python
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+
+# Secrets and local databases
+.env
+.streamlit/secrets.toml
+truthlens.db
+*.db
+
+# Dataset and trained artifacts are generated locally
+data/*.csv
+models/*.joblib
+models/*.json
+models/*.csv
+
+# Editor/OS files
+.vscode/
+.DS_Store
+Thumbs.db
