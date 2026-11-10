@@ -14,9 +14,10 @@ TRUTHLENS - START HERE
 7. Put Fake.csv and True.csv inside data/.
 8. Train the model:
    python train_model.py
-9. Run the app:
-   streamlit run app.py
-10. Run tests:
+9. Run the local web app:
+   python app.py
+10. Open http://127.0.0.1:5000 in your browser.
+11. Run tests:
     python -m pytest -v
 
 The ZIP includes source code and documentation, but not the dataset or

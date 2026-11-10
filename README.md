@@ -1,6 +1,6 @@
 # TruthLens — Fake News Detection System
 
-TruthLens is an educational machine-learning web application that classifies news text using TF-IDF and Logistic Regression. It includes model evaluation, model comparison, SQLite prediction history, CSV export, and a Streamlit interface.
+TruthLens is an educational machine-learning web application that classifies news text using TF-IDF and Logistic Regression. It includes model evaluation, model comparison, SQLite prediction history, CSV export, and a responsive Flask, HTML, CSS, and JavaScript interface.
 
 > **Important:** The model predicts labels learned from a dataset. It does not independently verify whether a claim is true. Predictions can be wrong and should not be treated as definitive fact-checks.
 
@@ -13,17 +13,24 @@ TruthLens is an educational machine-learning web application that classifies new
 - Accuracy, precision, recall, and F1-score dashboard
 - SQLite prediction history
 - Search and CSV export of saved predictions
+- Responsive analyze, dashboard, history, and about pages
+- Server-side input limits, parameterized SQLite queries, and browser-side text rendering
 - Automated tests with pytest
 
 ## Technology
 
-Python, Pandas, NumPy, Scikit-learn, Streamlit, SQLite, Joblib, Pytest.
+Python, Flask, HTML, CSS, JavaScript, Pandas, NumPy, Scikit-learn, SQLite, Joblib, Pytest.
 
 ## Project structure
 
 ```text
 TruthLens/
 ├── app.py
+├── templates/
+│   └── index.html
+├── static/
+│   ├── css/styles.css
+│   └── js/app.js
 ├── train_model.py
 ├── predictor.py
 ├── database.py
@@ -71,13 +78,15 @@ Training creates `models/news_model.joblib`, `models/metrics.json`, `models/mode
 
 The app expects a trained model. The model files are not included in this starter ZIP because they are generated from the dataset.
 
-## Run the app
+## Run the local web app
 
 ```powershell
-streamlit run app.py
+python app.py
 ```
 
-Open http://localhost:8501.
+Open http://127.0.0.1:5000.
+
+The app binds to localhost and runs with Flask debug mode disabled. Article input is checked on the server for type and length; SQL statements use bound parameters, and article/history text is rendered as text rather than executable markup. Security checks intentionally do not reject SQL-looking words or HTML-like text, since those can be part of a news article.
 
 ## Run tests
 
@@ -87,9 +96,7 @@ python -m pytest -v
 
 ## GitHub and deployment
 
-Push your source code to GitHub. For Streamlit Community Cloud, make sure the trained model artifact and metadata are available to the deployment. Since the model artifacts are ignored by `.gitignore`, either commit the necessary model files after reviewing their size and licensing implications, or arrange for the deployment to download them from a suitable model-storage location.
-
-Deployment guide: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app
+For deployment, use a production WSGI server rather than Flask's built-in development server. Make the trained model artifact and metadata available to the deployment; model artifacts are ignored by `.gitignore`, so arrange suitable model storage and review licensing and privacy requirements.
 
 ## Evaluation
 

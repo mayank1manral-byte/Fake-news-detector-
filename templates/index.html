@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a22">
+  <title>TruthLens — News analysis studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" data-page-link="analyze" aria-label="TruthLens home">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span><strong>TruthLens</strong><small>News analysis studio</small></span>
+      </a>
+      <p class="side-label">Workspace</p>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" type="button" data-page-link="analyze"><span aria-hidden="true">⌕</span> Analyze news</button>
+        <button class="nav-link" type="button" data-page-link="dashboard"><span aria-hidden="true">◫</span> Dashboard</button>
+        <button class="nav-link" type="button" data-page-link="history"><span aria-hidden="true">↺</span> History</button>
+        <button class="nav-link" type="button" data-page-link="about"><span aria-hidden="true">ⓘ</span> About</button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="note-icon" aria-hidden="true">i</span>
+        <p>This model estimates text patterns. It cannot verify whether a story is true.</p>
+      </div>
+      <div class="sidebar-foot"><span class="status-dot"></span> Local analysis workspace</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>TRUTHLENS</span><span class="crumb-separator">/</span><span id="current-section">ANALYZE</span></div>
+        <span class="local-badge"><span class="status-dot"></span> Private, local storage</span>
+      </header>
+
+      <section class="page active" id="page-analyze" aria-labelledby="analyze-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-line"></span> NEWS CREDIBILITY · TEXT ANALYSIS</div>
+          <h1 id="analyze-title">Read beyond<br class="desktop-break"> the headline<span class="accent">.</span></h1>
+          <p>Explore how a trained language model classifies a news article. Use its estimate as a starting point for a closer look.</p>
+        </div>
+
+        <div class="analysis-grid">
+          <section class="card input-card" aria-labelledby="input-title">
+            <div class="card-topline"><span class="section-number">01</span><span>ARTICLE INPUT</span><span class="secure-label"><span aria-hidden="true">◆</span> TEXT ONLY</span></div>
+            <h2 id="input-title">What would you like to analyze?</h2>
+            <p class="card-subtitle">Paste a headline or article below. No HTML or scripts are run.</p>
+            <form id="analysis-form">
+              <label class="sr-only" for="article-input">News article text</label>
+              <textarea id="article-input" name="article" minlength="30" maxlength="50000" placeholder="Paste the headline and article text here..." required></textarea>
+              <div class="input-meta">
+                <span id="input-feedback" aria-live="polite">At least 30 characters</span>
+                <span><span id="character-count">0</span> / 50,000</span>
+              </div>
+              <button class="primary-button" id="analyze-button" type="submit">
+                <span>Analyze article</span><span class="button-arrow" aria-hidden="true">↗</span>
+              </button>
+            </form>
+            <p class="privacy-copy"><span aria-hidden="true">⌑</span> Submissions are saved in your local prediction history. Avoid sensitive information.</p>
+            <div class="result-card hidden" id="result-card" aria-live="polite">
+              <div class="result-heading"><span class="section-number">02</span><span>ANALYSIS RESULT</span></div>
+              <div class="result-verdict" id="result-verdict"></div>
+              <div class="result-stats">
+                <div><span class="stat-label">Fake-class probability</span><strong id="fake-probability">—</strong></div>
+                <div><span class="stat-label">Words analyzed</span><strong id="word-count">—</strong></div>
+                <div><span class="stat-label">Characters</span><strong id="result-character-count">—</strong></div>
+              </div>
+              <progress class="probability-track" id="probability-fill" max="1" value="0" aria-label="Fake-class probability"></progress>
+              <p class="result-disclaimer">This score reflects learned patterns. It is not a verified probability that the article is false.</p>
+            </div>
+            <div class="message hidden" id="form-message" role="alert"></div>
+          </section>
+
+          <aside class="card guide-card">
+            <div class="card-topline"><span class="guide-icon" aria-hidden="true">✳</span><span>HOW IT WORKS</span></div>
+            <h2>Patterns, not fact-checking.</h2>
+            <p class="guide-intro">TruthLens compares the writing in your text with examples from its training dataset.</p>
+            <div class="steps">
+              <div class="step"><span>01</span><div><strong>Text features</strong><p>TF-IDF represents words and phrases as model features.</p></div></div>
+              <div class="step"><span>02</span><div><strong>Classification</strong><p>Logistic Regression estimates the dataset label.</p></div></div>
+              <div class="step"><span>03</span><div><strong>Review the result</strong><p>Use the score to investigate—not as a verdict.</p></div></div>
+            </div>
+            <div class="guide-callout"><span aria-hidden="true">↗</span><p>Check important claims against primary sources and reputable independent reporting.</p></div>
+          </aside>
+        </div>
+        <footer class="page-footer"><span>TRUTHLENS · EDUCATIONAL TEXT CLASSIFIER</span><span>Model outputs can be wrong. Verify independently.</span></footer>
+      </section>
+
+      <section class="page" id="page-dashboard" aria-labelledby="dashboard-title">
+        <div class="page-heading compact">
+          <div class="eyebrow"><span class="eyebrow-line"></span> MODEL INSIGHTS · EVALUATION</div>
+          <h1 id="dashboard-title">Performance at a glance<span class="accent">.</span></h1>
+          <p>Scores describe held-out examples from the dataset—not guaranteed real-world reliability.</p>
+        </div>
+        <div class="metric-grid" id="metric-grid"></div>
+        <p class="muted-copy" id="metrics-caption"></p>
+        <section class="card dashboard-card">
+          <div class="card-topline"><span class="section-number">01</span><span>MODEL COMPARISON</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1-score</th></tr></thead><tbody id="comparison-body"></tbody></table></div>
+          <div class="empty-state hidden" id="metrics-empty">Model results are missing. Run <code>python train_model.py</code> first.</div>
+        </section>
+        <div class="info-strip"><strong>How to read these metrics</strong><span>Precision measures correct fake labels among fake predictions. Recall measures detected fake labels. F1-score balances precision and recall.</span></div>
+      </section>
+
+      <section class="page" id="page-history" aria-labelledby="history-title">
+        <div class="page-heading compact">
+          <div class="eyebrow"><span class="eyebrow-line"></span> YOUR WORKSPACE · SAVED ANALYSES</div>
+          <h1 id="history-title">A record of your reviews<span class="accent">.</span></h1>
+          <p>Search saved articles, inspect individual entries, or export the visible history.</p>
+        </div>
+        <section class="card history-card">
+          <div class="history-toolbar">
+            <label class="search-box"><span aria-hidden="true">⌕</span><input id="history-search" type="search" placeholder="Search article text..." autocomplete="off"></label>
+            <div class="toolbar-actions"><a class="secondary-button" id="export-history" href="/api/history.csv">Export CSV <span aria-hidden="true">↗</span></a><button class="danger-button" id="clear-history" type="button">Clear history</button></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Analysis</th><th>Date</th><th>Prediction</th><th>Fake probability</th><th>Words</th><th></th></tr></thead><tbody id="history-body"></tbody></table></div>
+          <div class="empty-state hidden" id="history-empty">No prediction history yet. Analyze an article to start your review log.</div>
+        </section>
+        <section class="card selected-article hidden" id="selected-article">
+          <div class="card-topline"><span class="section-number">SELECTED</span><span>ARTICLE DETAILS</span></div>
+          <div class="selected-meta" id="selected-meta"></div>
+          <p class="article-preview" id="article-preview"></p>
+        </section>
+      </section>
+
+      <section class="page" id="page-about" aria-labelledby="about-title">
+        <div class="page-heading compact">
+          <div class="eyebrow"><span class="eyebrow-line"></span> ABOUT THE PROJECT</div>
+          <h1 id="about-title">A lens on language<span class="accent">.</span></h1>
+          <p>TruthLens is an educational news-text classification project built to make machine-learning outputs approachable and transparent.</p>
+        </div>
+        <div class="about-grid">
+          <section class="card"><div class="card-topline"><span class="section-number">01</span><span>THE METHOD</span></div><h2>From words to a prediction</h2><p>The app combines TF-IDF text features with a Logistic Regression classifier trained on labeled examples.</p><div class="about-list"><div><b>01</b><span><strong>Input</strong>A headline or article is submitted for analysis.</span></div><div><b>02</b><span><strong>Features</strong>The fitted vectorizer maps words and phrases into numeric features.</span></div><div><b>03</b><span><strong>Output</strong>The classifier estimates a label and class probability.</span></div><div><b>04</b><span><strong>History</strong>Predictions are saved in a local SQLite database.</span></div></div></section>
+          <section class="card"><div class="card-topline"><span class="section-number">02</span><span>IMPORTANT LIMITATIONS</span></div><h2>A prediction is not a fact-check</h2><p>The model may learn patterns that do not correspond to factual accuracy. Treat its output as a starting point for independent research.</p><div class="about-list"><div><b>!</b><span><strong>Dataset labels</strong>Training labels can be incomplete, biased, or incorrect.</span></div><div><b>!</b><span><strong>Changing events</strong>New topics, sources, or styles may be misclassified.</span></div><div><b>!</b><span><strong>Probability meaning</strong>Scores are model estimates, not the chance a claim is true.</span></div><div><b>!</b><span><strong>Privacy</strong>Submitted text is stored in local prediction history.</span></div></div></section>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
